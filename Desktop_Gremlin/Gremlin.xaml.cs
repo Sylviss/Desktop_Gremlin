@@ -357,8 +357,18 @@ namespace Desktop_Gremlin
         {
             TRAY_ICON.Visible = false;
             string exePath = Process.GetCurrentProcess().MainModule.FileName;
-            Process.Start(exePath);
-            System.Windows.Application.Current.Shutdown();
+            
+            // Verify the file still exists before attempting restart
+            if (File.Exists(exePath))
+            {
+                Process.Start(exePath);
+                System.Windows.Application.Current.Shutdown();
+            }
+            else
+            {
+                NormalError("Application file not found. Cannot restart.", "Restart Error");
+                System.Windows.Application.Current.Shutdown();
+            }
         }
         private void CloseApp()
         {
